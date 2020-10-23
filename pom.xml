@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dfcb</groupId>
+    <groupId>com.dragonflyxd</groupId>
     <artifactId>dfcb</artifactId>
     <version>${reversion}</version>
     <packaging>pom</packaging>
-    <name>dfcb</name>
+    <name>DFC</name>
     <description>DFC Backend</description>
     <url>https://github.com/DragonFlyXD/dfcb/tree/dev</url>
 
     <properties>
         <reversion>1.0.0-SNAPSHOT</reversion>
+        <mybatis.plus.version>3.4.0</mybatis.plus.version>
+        <commons.collections4.version>4.4</commons.collections4.version>
         <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR8</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.3.RELEASE</spring.cloud.alibaba.version>
@@ -21,11 +24,26 @@
     </properties>
 
     <modules>
-        <module/>
+        <module>dfcb-components</module>
+        <module>dfcb-docs</module>
+        <module>dfcb-platform</module>
+        <module>dfcb-services</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collections4.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
