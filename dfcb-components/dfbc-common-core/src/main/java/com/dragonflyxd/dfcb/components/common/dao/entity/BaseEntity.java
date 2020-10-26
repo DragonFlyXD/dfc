@@ -1,4 +1,4 @@
-package com.dragonflyxd.dfcb.components.common.web.entity;
+package com.dragonflyxd.dfcb.components.common.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
