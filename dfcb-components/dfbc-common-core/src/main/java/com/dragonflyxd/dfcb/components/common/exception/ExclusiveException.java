@@ -12,6 +12,6 @@ import lombok.Data;
 @Data
 public class ExclusiveException extends BaseException {
     public ExclusiveException() {
-        super(ResponseCodeEnum.EXCLUSIVE.getCode(), ResponseCodeEnum.EXCLUSIVE.getMessage());
+        super(ResponseCodeEnum.EXCLUSIVE_ERROR.getCode(), ResponseCodeEnum.EXCLUSIVE_ERROR.getMessage());
     }
 }

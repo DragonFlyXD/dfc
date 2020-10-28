@@ -12,15 +12,16 @@ public enum ResponseCodeEnum {
     /**
      * 成功
      */
-    SUCCESS("IMSG000001", "SUCCESS"),
+    SUCCESS("IMS10000", "SUCCESS"),
     /**
      * 系统异常
      */
-    SYSTEM_ERROR("EMSG000001", "SYSTEM_ERROR"),
+    SYSTEM_ERROR("EMS500001", "SYSTEM_ERROR"),
     /**
-     * 排他
+     * 排他异常
      */
-    EXCLUSIVE("EMSG000002", "EXCLUSIVE");
+    EXCLUSIVE_ERROR("EMS500002", "EXCLUSIVE_ERROR");
+
 
     private String code;
     private String message;
