@@ -9,7 +9,11 @@ import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWra
 import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dragonflyxd.dfcb.components.common.dao.entity.BaseEntity;
+import com.dragonflyxd.dfcb.components.common.emuns.DeleteFlagEnum;
+import com.dragonflyxd.dfcb.components.common.emuns.ResponseCodeEnum;
+import com.dragonflyxd.dfcb.components.common.util.AssertUtil;
 import com.dragonflyxd.dfcb.components.common.web.dto.BaseDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -25,71 +29,93 @@ import java.util.stream.Collectors;
  * @since 2020.10.27
  **/
 public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> extends IService<Entity> {
-    default boolean save(DTO dto) {
-        return save(DTOToEntity(dto));
+    /**
+     * 保存
+     *
+     * @param dto DTO
+     * @return DTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default DTO save(DTO dto) {
+        AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.isTrue(save(DTOToEntity(dto)), ResponseCodeEnum.SAVE_FAILED.getCode());
+
+        return dto;
     }
 
-    default boolean saveBatch(List<DTO> dtos) {
-        return saveBatch(DTOsToEntities(dtos));
+    /**
+     * 批量保存
+     *
+     * @param dtos DTO集合
+     * @return DTO集合
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default List<DTO> saveBatch(List<DTO> dtos) {
+        AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.isTrue(saveBatch(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
+
+        return dtos;
     }
 
-    default boolean saveBatch(List<DTO> dtos, int batchSize) {
-        return saveBatch(DTOsToEntities(dtos), )
+    /**
+     * 更新
+     *
+     * @param dto DTO
+     * @return DTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default DTO update(DTO dto) {
+        AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.isTrue(updateById(DTOToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
+
+        return dto;
     }
 
-    @Override
-    default boolean saveOrUpdateBatch(Collection<Entity> entityList) {
-        return false;
+    /**
+     * 批量更新
+     *
+     * @param dtos DTO集合
+     * @return DTO集合
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default List<DTO> updateBatch(List<DTO> dtos) {
+        AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.isTrue(updateBatchById(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
+
+        return dtos;
     }
 
-    @Override
-    boolean saveOrUpdateBatch(Collection<Entity> entityList, int batchSize);
+    /**
+     * 删除
+     *
+     * @param dto DTO
+     * @return DTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default DTO remove(DTO dto) {
+        AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
-    @Override
-    default boolean removeById(Serializable id) {
-        return false;
+        dto.setDeleteFlag(DeleteFlagEnum.DELETED.getCode());
+        AssertUtil.isTrue(updateById(DTOToEntity(dto)), ResponseCodeEnum.DELETE_FAILED.getCode());
+
+        return dto;
     }
 
-    @Override
-    default boolean removeByMap(Map<String, Object> columnMap) {
-        return false;
+    /**
+     * 批量删除
+     *
+     * @param dtos DTO集合
+     * @return DTO集合
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default List<DTO> removeBatch(List<DTO> dtos) {
+        AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
+
+        dtos.forEach(v -> v.setDeleteFlag(DeleteFlagEnum.DELETED.getCode()));
+        AssertUtil.isTrue(updateBatchById(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.DELETE_BATCH_FAILED.getCode());
+
+        return dtos;
     }
-
-    @Override
-    default boolean remove(Wrapper<Entity> queryWrapper) {
-        return false;
-    }
-
-    @Override
-    default boolean removeByIds(Collection<? extends Serializable> idList) {
-        return false;
-    }
-
-    @Override
-    default boolean updateById(Entity entity) {
-        return false;
-    }
-
-    @Override
-    default boolean update(Wrapper<Entity> updateWrapper) {
-        return false;
-    }
-
-    @Override
-    default boolean update(Entity entity, Wrapper<Entity> updateWrapper) {
-        return false;
-    }
-
-    @Override
-    default boolean updateBatchById(Collection<Entity> entityList) {
-        return false;
-    }
-
-    @Override
-    boolean updateBatchById(Collection<Entity> entityList, int batchSize);
-
-    @Override
-    boolean saveOrUpdate(Entity entity);
 
     @Override
     default Entity getById(Serializable id) {
@@ -218,14 +244,38 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
         return false;
     }
 
+    /**
+     * DTO转换成实体类
+     *
+     * @param dto DTO
+     * @return 实体类
+     */
     Entity DTOToEntity(DTO dto);
 
+    /**
+     * DTO批量转换成实体类
+     *
+     * @param dtos DTO集合
+     * @return 实体类集合
+     */
     default List<Entity> DTOsToEntities(List<DTO> dtos) {
         return dtos.stream().map(this::DTOToEntity).collect(Collectors.toList());
     }
 
+    /**
+     * 实体类转换成DTO
+     *
+     * @param entity 实体类
+     * @return DTO
+     */
     DTO entityToDTO(Entity entity);
 
+    /**
+     * 实体类批量转换成DTO
+     *
+     * @param entities 实体类集合
+     * @return DTO集合
+     */
     default List<DTO> entitiesToDTOs(List<Entity> entities) {
         return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }

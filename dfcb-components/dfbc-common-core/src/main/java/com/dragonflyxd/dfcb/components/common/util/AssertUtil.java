@@ -61,18 +61,6 @@ public class AssertUtil {
         }
     }
 
-    public static void equals(int val1, int val2, String code) {
-        if (val1 != val2) {
-            error(code);
-        }
-    }
-
-    public static void equals(int val1, int val2, String code, Object[] args) {
-        if (val1 != val2) {
-            error(code, args);
-        }
-    }
-
     public static void isEmpty(Collection<?> collection, String code) {
         if (CollectionUtils.isNotEmpty(collection)) {
             error(code);

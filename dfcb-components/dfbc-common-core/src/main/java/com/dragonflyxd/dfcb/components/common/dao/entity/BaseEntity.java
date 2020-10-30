@@ -1,7 +1,6 @@
 package com.dragonflyxd.dfcb.components.common.dao.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.dragonflyxd.dfcb.components.common.bean.BaseBean;
 import lombok.Data;
@@ -28,7 +27,6 @@ public class BaseEntity extends BaseBean {
     /**
      * 删除标识
      */
-    @TableLogic
     private Integer deleteFlag;
     /**
      * 创建用户ID
