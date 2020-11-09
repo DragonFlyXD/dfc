@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
  * @author longfei.chen
  * @since 2020.10.27
  **/
-public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> extends IService<Entity> {
+public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IService<E> {
     /**
      * 根据主键查询
      *
      * @param id 主键
      * @return DTO
      */
-    default DTO findById(Long id) {
+    default D findById(Long id) {
         AssertUtil.notNull(id, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         return entityToDTO(getById(id));
@@ -36,7 +36,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param ids 主键集合
      * @return DTO集合
      */
-    default List<DTO> findByIds(List<Long> ids) {
+    default List<D> findByIds(List<Long> ids) {
         AssertUtil.notEmpty(ids, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         return entitiesToDTOs(listByIds(ids));
@@ -49,7 +49,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO
      */
     @Transactional(rollbackFor = Exception.class)
-    default DTO save(DTO dto) {
+    default D save(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
         AssertUtil.isTrue(save(dtoToEntity(dto)), ResponseCodeEnum.SAVE_FAILED.getCode());
 
@@ -63,7 +63,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO集合
      */
     @Transactional(rollbackFor = Exception.class)
-    default List<DTO> saveBatch(List<DTO> dtos) {
+    default List<D> saveBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
         AssertUtil.isTrue(saveBatch(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
 
@@ -77,7 +77,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO
      */
     @Transactional(rollbackFor = Exception.class)
-    default DTO update(DTO dto) {
+    default D update(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
         AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
 
@@ -91,7 +91,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO集合
      */
     @Transactional(rollbackFor = Exception.class)
-    default List<DTO> updateBatch(List<DTO> dtos) {
+    default List<D> updateBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
         AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
 
@@ -105,7 +105,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO
      */
     @Transactional(rollbackFor = Exception.class)
-    default DTO remove(DTO dto) {
+    default D remove(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dto.setDeleteFlag(DeleteFlagEnum.DELETED.getCode());
@@ -121,7 +121,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @return DTO集合
      */
     @Transactional(rollbackFor = Exception.class)
-    default List<DTO> removeBatch(List<DTO> dtos) {
+    default List<D> removeBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dtos.forEach(v -> v.setDeleteFlag(DeleteFlagEnum.DELETED.getCode()));
@@ -136,7 +136,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param dto DTO
      * @return 实体类
      */
-    Entity dtoToEntity(DTO dto);
+    E dtoToEntity(D dto);
 
     /**
      * DTO批量转换成实体类
@@ -144,7 +144,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param dtos DTO集合
      * @return 实体类集合
      */
-    default List<Entity> dtosToEntities(List<DTO> dtos) {
+    default List<E> dtosToEntities(List<D> dtos) {
         return dtos.stream().map(this::dtoToEntity).collect(Collectors.toList());
     }
 
@@ -154,7 +154,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param entity 实体类
      * @return DTO
      */
-    DTO entityToDTO(Entity entity);
+    D entityToDTO(E entity);
 
     /**
      * 实体类批量转换成DTO
@@ -162,7 +162,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param entities 实体类集合
      * @return DTO集合
      */
-    default List<DTO> entitiesToDTOs(List<Entity> entities) {
+    default List<D> entitiesToDTOs(List<E> entities) {
         return entities.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 }

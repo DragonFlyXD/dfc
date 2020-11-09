@@ -16,8 +16,8 @@ import org.springframework.beans.BeanUtils;
  * @since 2020.10.28
  **/
 @Slf4j
-public class BaseServiceImpl<T extends BaseEntity, DTO extends BaseDTO, M extends BaseMapper<T>> extends ServiceImpl<M, T> implements BaseService<T, DTO> {
-    protected Class<DTO> dtoClass = currentDTOClass();
+public class BaseServiceImpl<E extends BaseEntity, D extends BaseDTO, M extends BaseMapper<E>> extends ServiceImpl<M, E> implements BaseService<E, D> {
+    protected Class<D> dtoClass = currentDTOClass();
 
     /**
      * DTO转换成实体类
@@ -26,11 +26,11 @@ public class BaseServiceImpl<T extends BaseEntity, DTO extends BaseDTO, M extend
      * @return 实体类
      */
     @Override
-    public T dtoToEntity(DTO dto) {
-        T entity;
+    public E dtoToEntity(D dto) {
+        E entity;
 
         try {
-            entity = (T) entityClass.newInstance();
+            entity = (E) entityClass.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
             log.error("BaseServiceImpl.dtoToEntity err：{}", ex.getMessage());
 
@@ -49,8 +49,8 @@ public class BaseServiceImpl<T extends BaseEntity, DTO extends BaseDTO, M extend
      * @return DTO
      */
     @Override
-    public DTO entityToDTO(T entity) {
-        DTO dto;
+    public D entityToDTO(E entity) {
+        D dto;
 
         try {
             dto = dtoClass.newInstance();
@@ -70,7 +70,7 @@ public class BaseServiceImpl<T extends BaseEntity, DTO extends BaseDTO, M extend
      *
      * @return DTO类型
      */
-    protected Class<DTO> currentDTOClass() {
-        return (Class<DTO>) ReflectionKit.getSuperClassGenericType(getClass(), 1);
+    protected Class<D> currentDTOClass() {
+        return (Class<D>) ReflectionKit.getSuperClassGenericType(getClass(), 1);
     }
 }
