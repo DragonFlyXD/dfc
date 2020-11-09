@@ -2,6 +2,7 @@ package com.dragonflyxd.dfcb.components.common.web.dto;
 
 import com.dragonflyxd.dfcb.components.common.bean.BaseBean;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
  * @author longfei.chen
  * @since 2020.10.23
  **/
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class BaseDTO extends BaseBean {
     /**

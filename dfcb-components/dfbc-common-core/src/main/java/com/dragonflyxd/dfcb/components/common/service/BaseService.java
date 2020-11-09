@@ -1,12 +1,5 @@
 package com.dragonflyxd.dfcb.components.common.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dragonflyxd.dfcb.components.common.dao.entity.BaseEntity;
 import com.dragonflyxd.dfcb.components.common.emuns.DeleteFlagEnum;
@@ -15,11 +8,7 @@ import com.dragonflyxd.dfcb.components.common.util.AssertUtil;
 import com.dragonflyxd.dfcb.components.common.web.dto.BaseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +19,30 @@ import java.util.stream.Collectors;
  **/
 public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> extends IService<Entity> {
     /**
+     * 根据主键查询
+     *
+     * @param id 主键
+     * @return DTO
+     */
+    default DTO findById(Long id) {
+        AssertUtil.notNull(id, ResponseCodeEnum.PARAMS_INVALID.getCode());
+
+        return entityToDTO(getById(id));
+    }
+
+    /**
+     * 根据主键集合查询
+     *
+     * @param ids 主键集合
+     * @return DTO集合
+     */
+    default List<DTO> findByIds(List<Long> ids) {
+        AssertUtil.notEmpty(ids, ResponseCodeEnum.PARAMS_INVALID.getCode());
+
+        return entitiesToDTOs(listByIds(ids));
+    }
+
+    /**
      * 保存
      *
      * @param dto DTO
@@ -38,7 +51,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
     @Transactional(rollbackFor = Exception.class)
     default DTO save(DTO dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(save(DTOToEntity(dto)), ResponseCodeEnum.SAVE_FAILED.getCode());
+        AssertUtil.isTrue(save(dtoToEntity(dto)), ResponseCodeEnum.SAVE_FAILED.getCode());
 
         return dto;
     }
@@ -52,7 +65,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
     @Transactional(rollbackFor = Exception.class)
     default List<DTO> saveBatch(List<DTO> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(saveBatch(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(saveBatch(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
 
         return dtos;
     }
@@ -66,7 +79,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
     @Transactional(rollbackFor = Exception.class)
     default DTO update(DTO dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(updateById(DTOToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
+        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
 
         return dto;
     }
@@ -80,7 +93,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
     @Transactional(rollbackFor = Exception.class)
     default List<DTO> updateBatch(List<DTO> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(updateBatchById(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
 
         return dtos;
     }
@@ -96,7 +109,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dto.setDeleteFlag(DeleteFlagEnum.DELETED.getCode());
-        AssertUtil.isTrue(updateById(DTOToEntity(dto)), ResponseCodeEnum.DELETE_FAILED.getCode());
+        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.DELETE_FAILED.getCode());
 
         return dto;
     }
@@ -112,136 +125,9 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dtos.forEach(v -> v.setDeleteFlag(DeleteFlagEnum.DELETED.getCode()));
-        AssertUtil.isTrue(updateBatchById(DTOsToEntities(dtos), dtos.size()), ResponseCodeEnum.DELETE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.DELETE_BATCH_FAILED.getCode());
 
         return dtos;
-    }
-
-    @Override
-    default Entity getById(Serializable id) {
-        return null;
-    }
-
-    @Override
-    default List<Entity> listByIds(Collection<? extends Serializable> idList) {
-        return null;
-    }
-
-    @Override
-    default List<Entity> listByMap(Map<String, Object> columnMap) {
-        return null;
-    }
-
-    @Override
-    default Entity getOne(Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    Entity getOne(Wrapper<Entity> queryWrapper, boolean throwEx);
-
-    @Override
-    Map<String, Object> getMap(Wrapper<Entity> queryWrapper);
-
-    @Override
-    <V> V getObj(Wrapper<Entity> queryWrapper, Function<? super Object, V> mapper);
-
-    @Override
-    default int count() {
-        return 0;
-    }
-
-    @Override
-    default int count(Wrapper<Entity> queryWrapper) {
-        return 0;
-    }
-
-    @Override
-    default List<Entity> list(Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    default List<Entity> list() {
-        return null;
-    }
-
-    @Override
-    default <E extends IPage<Entity>> E page(E page, Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    default <E extends IPage<Entity>> E page(E page) {
-        return null;
-    }
-
-    @Override
-    default List<Map<String, Object>> listMaps(Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    default List<Map<String, Object>> listMaps() {
-        return null;
-    }
-
-    @Override
-    default List<Object> listObjs() {
-        return null;
-    }
-
-    @Override
-    default <V> List<V> listObjs(Function<? super Object, V> mapper) {
-        return null;
-    }
-
-    @Override
-    default List<Object> listObjs(Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    default <V> List<V> listObjs(Wrapper<Entity> queryWrapper, Function<? super Object, V> mapper) {
-        return null;
-    }
-
-    @Override
-    default <E extends IPage<Map<String, Object>>> E pageMaps(E page, Wrapper<Entity> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    default <E extends IPage<Map<String, Object>>> E pageMaps(E page) {
-        return null;
-    }
-
-    @Override
-    BaseMapper<Entity> getBaseMapper();
-
-    @Override
-    default QueryChainWrapper<Entity> query() {
-        return null;
-    }
-
-    @Override
-    default LambdaQueryChainWrapper<Entity> lambdaQuery() {
-        return null;
-    }
-
-    @Override
-    default UpdateChainWrapper<Entity> update() {
-        return null;
-    }
-
-    @Override
-    default LambdaUpdateChainWrapper<Entity> lambdaUpdate() {
-        return null;
-    }
-
-    @Override
-    default boolean saveOrUpdate(Entity entity, Wrapper<Entity> updateWrapper) {
-        return false;
     }
 
     /**
@@ -250,7 +136,7 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param dto DTO
      * @return 实体类
      */
-    Entity DTOToEntity(DTO dto);
+    Entity dtoToEntity(DTO dto);
 
     /**
      * DTO批量转换成实体类
@@ -258,8 +144,8 @@ public interface BaseService<Entity extends BaseEntity, DTO extends BaseDTO> ext
      * @param dtos DTO集合
      * @return 实体类集合
      */
-    default List<Entity> DTOsToEntities(List<DTO> dtos) {
-        return dtos.stream().map(this::DTOToEntity).collect(Collectors.toList());
+    default List<Entity> dtosToEntities(List<DTO> dtos) {
+        return dtos.stream().map(this::dtoToEntity).collect(Collectors.toList());
     }
 
     /**
