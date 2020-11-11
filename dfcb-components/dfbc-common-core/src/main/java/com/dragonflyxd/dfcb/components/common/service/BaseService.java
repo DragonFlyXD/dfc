@@ -19,6 +19,15 @@ import java.util.stream.Collectors;
  **/
 public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IService<E> {
     /**
+     * 查询所有
+     *
+     * @return DTO集合
+     */
+    default List<D> findAll() {
+        return entitiesToDTOs(list());
+    }
+
+    /**
      * 根据主键查询
      *
      * @param id 主键
@@ -79,6 +88,24 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default D update(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
+
+        return dto;
+    }
+
+    /**
+     * 检查并更新
+     *
+     * @param id  主键
+     * @param dto DTO
+     * @return DTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default D checkAndUpdate(Long id, D dto) {
+        AssertUtil.notNull(id, ResponseCodeEnum.PARAMS_INVALID.getCode());
+        AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
+
+        AssertUtil.notNull(getById(id), ResponseCodeEnum.QUERY_FAILED.getCode());
         AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
 
         return dto;

@@ -22,33 +22,37 @@ public enum ResponseCodeEnum {
      */
     EXCLUSIVE_ERROR("EMS500101", "EXCLUSIVE_ERROR"),
     /**
+     * 查询失败
+     */
+    QUERY_FAILED("EMS500200", "QUERY_FAILED"),
+    /**
      * 保存失败
      */
-    SAVE_FAILED("EMS500200", "SAVE_FAILED"),
+    SAVE_FAILED("EMS500300", "SAVE_FAILED"),
     /**
      * 批量保存失败
      */
-    SAVE_BATCH_FAILED("EMS500201", "SAVE_BATCH_FAILED"),
+    SAVE_BATCH_FAILED("EMS500301", "SAVE_BATCH_FAILED"),
     /**
      * 更新失败
      */
-    UPDATE_FAILED("EMS500300", "UPDATE_FAILED"),
+    UPDATE_FAILED("EMS500400", "UPDATE_FAILED"),
     /**
      * 批量更新失败
      */
-    UPDATE_BATCH_FAILED("EMS500301", "UPDATE_BATCH_FAILED"),
+    UPDATE_BATCH_FAILED("EMS500401", "UPDATE_BATCH_FAILED"),
     /**
      * 删除失败
      */
-    DELETE_FAILED("EMS500400", "DELETE_FAILED"),
+    DELETE_FAILED("EMS500500", "DELETE_FAILED"),
     /**
      * 批量删除失败
      */
-    DELETE_BATCH_FAILED("EMS500401", "DELETE_BATCH_FAILED"),
+    DELETE_BATCH_FAILED("EMS500501", "DELETE_BATCH_FAILED"),
     /**
      * 参数不合法
      */
-    PARAMS_INVALID("EMS500501", "PARAMS_INVALID");
+    PARAMS_INVALID("EMS500601", "PARAMS_INVALID");
 
 
     private String code;

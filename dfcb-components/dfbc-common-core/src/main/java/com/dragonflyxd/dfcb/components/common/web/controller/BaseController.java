@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 控制器 - 基类
@@ -22,18 +23,40 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
     @Autowired
     private S service;
 
+    /**
+     * 查询所有
+     *
+     * @return DTO集合
+     */
+    @GetMapping
+    public List<D> getAll() {
+        return service.findAll();
+    }
+
+    /**
+     * 根据主键查询
+     *
+     * @param id 主键
+     * @return DTO
+     */
     @GetMapping("{id}")
-    public D show(@PathVariable Long id) {
+    public D getById(@PathVariable Long id) {
         return service.findById(id);
     }
 
+    /**
+     * 保存
+     *
+     * @param dto DTO
+     * @return DTO
+     */
     @PostMapping
-    public D store(@RequestBody D dto) {
+    public D create(@RequestBody D dto) {
         return service.save(dto);
     }
 
     @PutMapping("{id}")
-    public D update(@RequestBody D dto) {
-        return service.update(dto);
+    public D update(@PathVariable Long id, @RequestBody D dto) {
+        return service.checkAndUpdate(id, dto);
     }
 }
