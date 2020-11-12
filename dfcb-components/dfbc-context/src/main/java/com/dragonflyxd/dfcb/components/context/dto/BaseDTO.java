@@ -1,6 +1,6 @@
-package com.dragonflyxd.dfcb.components.common.web.dto;
+package com.dragonflyxd.dfcb.components.context.dto;
 
-import com.dragonflyxd.dfcb.components.common.bean.BaseBean;
+import com.dragonflyxd.dfcb.components.context.bean.BaseBean;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

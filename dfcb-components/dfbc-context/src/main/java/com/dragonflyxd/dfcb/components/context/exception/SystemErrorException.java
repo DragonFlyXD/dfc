@@ -1,6 +1,6 @@
-package com.dragonflyxd.dfcb.components.common.exception;
+package com.dragonflyxd.dfcb.components.context.exception;
 
-import com.dragonflyxd.dfcb.components.common.emuns.ResponseCodeEnum;
+import com.dragonflyxd.dfcb.components.context.emuns.ResponseCodeEnum;
 import lombok.Data;
 
 /**

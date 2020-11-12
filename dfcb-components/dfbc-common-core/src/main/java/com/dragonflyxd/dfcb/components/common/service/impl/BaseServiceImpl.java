@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dragonflyxd.dfcb.components.common.dao.entity.BaseEntity;
 import com.dragonflyxd.dfcb.components.common.dao.mapper.BaseMapper;
 import com.dragonflyxd.dfcb.components.common.service.BaseService;
-import com.dragonflyxd.dfcb.components.common.web.dto.BaseDTO;
+import com.dragonflyxd.dfcb.components.context.dto.BaseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 

@@ -1,4 +1,4 @@
-package com.dragonflyxd.dfcb.components.common.exception;
+package com.dragonflyxd.dfcb.components.context.exception;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

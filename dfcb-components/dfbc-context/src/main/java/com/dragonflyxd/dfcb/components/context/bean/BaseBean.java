@@ -1,4 +1,4 @@
-package com.dragonflyxd.dfcb.components.common.bean;
+package com.dragonflyxd.dfcb.components.context.bean;
 
 import java.io.Serializable;
 

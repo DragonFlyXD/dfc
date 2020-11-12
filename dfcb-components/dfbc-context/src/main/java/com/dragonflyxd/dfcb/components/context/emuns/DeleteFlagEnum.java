@@ -1,36 +1,32 @@
-package com.dragonflyxd.dfcb.components.common.emuns;
+package com.dragonflyxd.dfcb.components.context.emuns;
 
-import com.dragonflyxd.dfcb.components.common.util.EnumUtil;
+import com.dragonflyxd.dfcb.components.context.util.EnumUtil;
 
 /**
- * 启用标识 - 枚举
+ * 删除标识 - 枚举
  *
  * @author longfei.chen
  * @since 2020.10.23
  **/
-public enum EnableFlagEnum {
+public enum DeleteFlagEnum {
     /**
-     * 未启用
+     * 未删除
      */
-    NOT_ENABLE(0, "NOT_ENABLE"),
+    NOT_DELETE(0, "NOT_DELETE"),
     /**
-     * 已启用
+     * 已删除
      */
-    ENABLED(1, "ENABLED"),
-    /**
-     * 停用
-     */
-    DISABLED(2, "DISABLED");
+    DELETED(1, "DELETED");
 
     private Integer code;
     private String message;
 
-    EnableFlagEnum(Integer code, String message) {
+    DeleteFlagEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public static EnableFlagEnum getEnum(String code) {
+    public static DeleteFlagEnum getEnum(String code) {
         return EnumUtil.getByCode(values(), code);
     }
 

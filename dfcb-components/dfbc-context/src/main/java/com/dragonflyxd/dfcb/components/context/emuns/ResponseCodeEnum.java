@@ -1,6 +1,6 @@
-package com.dragonflyxd.dfcb.components.common.emuns;
+package com.dragonflyxd.dfcb.components.context.emuns;
 
-import com.dragonflyxd.dfcb.components.common.util.EnumUtil;
+import com.dragonflyxd.dfcb.components.context.util.EnumUtil;
 
 /**
  * 响应编码 - 枚举

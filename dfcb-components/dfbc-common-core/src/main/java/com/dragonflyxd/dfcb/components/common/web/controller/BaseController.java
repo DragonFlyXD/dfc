@@ -2,7 +2,9 @@ package com.dragonflyxd.dfcb.components.common.web.controller;
 
 import com.dragonflyxd.dfcb.components.common.dao.entity.BaseEntity;
 import com.dragonflyxd.dfcb.components.common.service.BaseService;
-import com.dragonflyxd.dfcb.components.common.web.dto.BaseDTO;
+import com.dragonflyxd.dfcb.components.context.api.BaseApi;
+import com.dragonflyxd.dfcb.components.context.dto.BaseDTO;
+import com.dragonflyxd.dfcb.components.context.response.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +18,7 @@ import java.util.List;
  * @author longfei.chen
  * @since 2020.11.09
  **/
-public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S extends BaseService<E, D>> {
+public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S extends BaseService<E, D>> implements BaseApi<D> {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
 
@@ -29,8 +31,9 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
      * @return DTO集合
      */
     @GetMapping
-    public List<D> getAll() {
-        return service.findAll();
+    @Override
+    public ResultResponse<List<D>> getAll() {
+        return ResultResponse.init().ok().build(service.findAll());
     }
 
     /**
@@ -40,8 +43,9 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
      * @return DTO
      */
     @GetMapping("{id}")
-    public D getById(@PathVariable Long id) {
-        return service.findById(id);
+    @Override
+    public ResultResponse<D> getById(@PathVariable Long id) {
+        return ResultResponse.init().ok().build(service.findById(id));
     }
 
     /**
@@ -51,8 +55,9 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
      * @return DTO
      */
     @PostMapping
-    public D create(@RequestBody D dto) {
-        return service.save(dto);
+    @Override
+    public ResultResponse<D> create(@RequestBody D dto) {
+        return ResultResponse.init().ok().build(service.save(dto));
     }
 
     /**
@@ -63,8 +68,9 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
      * @return DTO
      */
     @PutMapping("{id}")
-    public D update(@PathVariable Long id, @RequestBody D dto) {
-        return service.checkAndUpdate(id, dto);
+    @Override
+    public ResultResponse<D> update(@PathVariable Long id, @RequestBody D dto) {
+        return ResultResponse.init().ok().build(service.checkAndUpdate(id, dto));
     }
 
     /**
@@ -75,7 +81,8 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
      * @return DTO
      */
     @DeleteMapping("{id}")
-    public D delete(@PathVariable Long id, @RequestBody D dto) {
-        return service.checkAndDelete(id, dto);
+    @Override
+    public ResultResponse<D> delete(@PathVariable Long id, @RequestBody D dto) {
+        return ResultResponse.init().ok().build(service.checkAndDelete(id, dto));
     }
 }

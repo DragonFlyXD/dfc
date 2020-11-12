@@ -1,6 +1,6 @@
-package com.dragonflyxd.dfcb.components.common.util;
+package com.dragonflyxd.dfcb.components.context.util;
 
-import com.dragonflyxd.dfcb.components.common.exception.BizException;
+import com.dragonflyxd.dfcb.components.context.exception.BizException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
