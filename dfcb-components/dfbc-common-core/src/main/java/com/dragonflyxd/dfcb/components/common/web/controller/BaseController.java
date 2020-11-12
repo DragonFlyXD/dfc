@@ -67,8 +67,15 @@ public abstract class BaseController<E extends BaseEntity, D extends BaseDTO, S 
         return service.checkAndUpdate(id, dto);
     }
 
+    /**
+     * 删除
+     *
+     * @param id  主键
+     * @param dto DTO
+     * @return DTO
+     */
     @DeleteMapping("{id}")
-    public D delete(@PathVariable Long id){
-        return service.remove(id);
+    public D delete(@PathVariable Long id, @RequestBody D dto) {
+        return service.checkAndDelete(id, dto);
     }
 }

@@ -103,10 +103,10 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default D checkAndUpdate(Long id, D dto) {
         AssertUtil.notNull(id, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         AssertUtil.notNull(getById(id), ResponseCodeEnum.QUERY_FAILED.getCode());
-        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
+
+        update(dto);
 
         return dto;
     }
@@ -132,11 +132,29 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
      * @return DTO
      */
     @Transactional(rollbackFor = Exception.class)
-    default D remove(D dto) {
+    default D delete(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dto.setDeleteFlag(DeleteFlagEnum.DELETED.getCode());
         AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.DELETE_FAILED.getCode());
+
+        return dto;
+    }
+
+    /**
+     * 检查并删除
+     *
+     * @param id  主键
+     * @param dto DTO
+     * @return DTO
+     */
+    @Transactional(rollbackFor = Exception.class)
+    default D checkAndDelete(Long id, D dto) {
+        AssertUtil.notNull(id, ResponseCodeEnum.PARAMS_INVALID.getCode());
+
+        AssertUtil.notNull(getById(id), ResponseCodeEnum.QUERY_FAILED.getCode());
+
+        delete(dto);
 
         return dto;
     }
@@ -148,7 +166,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
      * @return DTO集合
      */
     @Transactional(rollbackFor = Exception.class)
-    default List<D> removeBatch(List<D> dtos) {
+    default List<D> deleteBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dtos.forEach(v -> v.setDeleteFlag(DeleteFlagEnum.DELETED.getCode()));
