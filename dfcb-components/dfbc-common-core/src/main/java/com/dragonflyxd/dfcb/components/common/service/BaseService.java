@@ -2,10 +2,10 @@ package com.dragonflyxd.dfcb.components.common.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dragonflyxd.dfcb.components.common.dao.entity.BaseEntity;
+import com.dragonflyxd.dfcb.components.context.dto.BaseDTO;
 import com.dragonflyxd.dfcb.components.context.emuns.DeleteFlagEnum;
 import com.dragonflyxd.dfcb.components.context.emuns.ResponseCodeEnum;
 import com.dragonflyxd.dfcb.components.context.util.AssertUtil;
-import com.dragonflyxd.dfcb.components.context.dto.BaseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default D save(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(save(dtoToEntity(dto)), ResponseCodeEnum.SAVE_FAILED.getCode());
+        AssertUtil.isTrue(save(dtoToEntity(dto, false)), ResponseCodeEnum.SAVE_FAILED.getCode());
 
         return dto;
     }
@@ -74,7 +74,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default List<D> saveBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(saveBatch(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(saveBatch(dtosToEntities(dtos, false), dtos.size()), ResponseCodeEnum.SAVE_BATCH_FAILED.getCode());
 
         return dtos;
     }
@@ -88,7 +88,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default D update(D dto) {
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.UPDATE_FAILED.getCode());
+        AssertUtil.isTrue(updateById(dtoToEntity(dto, true)), ResponseCodeEnum.UPDATE_FAILED.getCode());
 
         return dto;
     }
@@ -120,7 +120,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     @Transactional(rollbackFor = Exception.class)
     default List<D> updateBatch(List<D> dtos) {
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
-        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos, true), dtos.size()), ResponseCodeEnum.UPDATE_BATCH_FAILED.getCode());
 
         return dtos;
     }
@@ -136,7 +136,7 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
         AssertUtil.notNull(dto, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dto.setDeleteFlag(DeleteFlagEnum.DELETED.getCode());
-        AssertUtil.isTrue(updateById(dtoToEntity(dto)), ResponseCodeEnum.DELETE_FAILED.getCode());
+        AssertUtil.isTrue(updateById(dtoToEntity(dto, true)), ResponseCodeEnum.DELETE_FAILED.getCode());
 
         return dto;
     }
@@ -170,10 +170,24 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
         AssertUtil.notEmpty(dtos, ResponseCodeEnum.PARAMS_INVALID.getCode());
 
         dtos.forEach(v -> v.setDeleteFlag(DeleteFlagEnum.DELETED.getCode()));
-        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos), dtos.size()), ResponseCodeEnum.DELETE_BATCH_FAILED.getCode());
+        AssertUtil.isTrue(updateBatchById(dtosToEntities(dtos, true), dtos.size()), ResponseCodeEnum.DELETE_BATCH_FAILED.getCode());
 
         return dtos;
     }
+
+    /**
+     * 设置保存的共通字段
+     *
+     * @param dto DTO
+     */
+    void setSaveColumns(D dto);
+
+    /**
+     * 设置更新的共通字段
+     *
+     * @param dto DTO
+     */
+    void setUpdateColumns(D dto);
 
     /**
      * DTO转换成实体类
@@ -184,6 +198,22 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
     E dtoToEntity(D dto);
 
     /**
+     * DTO转换成实体类, 并设置共通字段
+     *
+     * @param dto DTO
+     * @return 实体类
+     */
+    default E dtoToEntity(D dto, boolean isUpdate) {
+        if (isUpdate) {
+            setUpdateColumns(dto);
+        } else {
+            setSaveColumns(dto);
+        }
+
+        return dtoToEntity(dto);
+    }
+
+    /**
      * DTO批量转换成实体类
      *
      * @param dtos DTO集合
@@ -191,6 +221,16 @@ public interface BaseService<E extends BaseEntity, D extends BaseDTO> extends IS
      */
     default List<E> dtosToEntities(List<D> dtos) {
         return dtos.stream().map(this::dtoToEntity).collect(Collectors.toList());
+    }
+
+    /**
+     * DTO批量转换成实体类
+     *
+     * @param dtos DTO集合
+     * @return 实体类集合
+     */
+    default List<E> dtosToEntities(List<D> dtos, boolean isUpdate) {
+        return dtos.stream().map(v -> dtoToEntity(v, isUpdate)).collect(Collectors.toList());
     }
 
     /**

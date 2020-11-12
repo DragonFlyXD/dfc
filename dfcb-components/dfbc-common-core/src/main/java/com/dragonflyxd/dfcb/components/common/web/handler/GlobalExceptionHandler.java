@@ -1,8 +1,8 @@
 package com.dragonflyxd.dfcb.components.common.web.handler;
 
+import com.dragonflyxd.dfcb.components.context.emuns.ResponseCodeEnum;
 import com.dragonflyxd.dfcb.components.context.exception.BaseException;
 import com.dragonflyxd.dfcb.components.context.exception.BizException;
-import com.dragonflyxd.dfcb.components.context.exception.SystemErrorException;
 import com.dragonflyxd.dfcb.components.context.response.ResultResponse;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +22,16 @@ public class GlobalExceptionHandler {
     public ResultResponse handle(Exception e) {
         log.error("global exception stack trace：{}", Throwables.getStackTraceAsString(e));
 
-        ResultResponse resp = new ResultResponse(new SystemErrorException());
-
         // 若为业务异常
         if (e instanceof BizException) {
-            resp.setCode(((BizException) e).getCode());
-            resp.setMessage(e.getMessage());
-        }
-        // 若为其他异常
-        else if (e instanceof BaseException) {
-            resp.setCode(((BaseException) e).getCode());
-            resp.setMessage(e.getMessage());
+            return ResultResponse.init().error(((BizException) e).getCode(), e.getMessage()).build();
         }
 
-        return resp;
+        // 若为其他异常
+        if (e instanceof BaseException) {
+            return ResultResponse.init().error(((BaseException) e).getCode(), e.getMessage()).build();
+        }
+
+        return ResultResponse.init().error(ResponseCodeEnum.SYSTEM_ERROR.getCode(), e.getMessage()).build();
     }
 }
