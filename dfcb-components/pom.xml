@@ -16,21 +16,22 @@
     <description>DFC Components</description>
 
     <modules>
-        <module>dfbc-common-core</module>
         <module>dfbc-context</module>
+        <module>dfbc-common-core</module>
+        <module>dfcb-common-starter</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.dragonflyxd</groupId>
-                <artifactId>dfbc-common-core</artifactId>
+                <artifactId>dfbc-context</artifactId>
                 <version>${reversion}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.dragonflyxd</groupId>
-                <artifactId>dfbc-context</artifactId>
+                <artifactId>dfbc-common-core</artifactId>
                 <version>${reversion}</version>
             </dependency>
         </dependencies>
