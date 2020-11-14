@@ -15,6 +15,10 @@
     <name>DFC Platform</name>
     <description>DFC Platform</description>
 
+    <modules>
+        <module>dfcb-gateway</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>

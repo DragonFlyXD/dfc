@@ -16,8 +16,8 @@
     <description>DFC Components</description>
 
     <modules>
-        <module>dfbc-context</module>
-        <module>dfbc-common-core</module>
+        <module>dfcb-context</module>
+        <module>dfcb-common-core</module>
         <module>dfcb-common-starter</module>
     </modules>
 
