@@ -5,26 +5,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dragonflyxd</groupId>
-    <artifactId>dfcb</artifactId>
+    <artifactId>dfcb-parent</artifactId>
     <version>${reversion}</version>
     <packaging>pom</packaging>
-    <name>DFC</name>
-    <description>DFC Backend</description>
+    <name>DFC Parent</name>
+    <description>DFC Parent</description>
     <url>https://github.com/DragonFlyXD/dfcb/tree/dev</url>
 
     <properties>
         <reversion>1.0.0-SNAPSHOT</reversion>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
-        <module>dfcb-components</module>
-        <module>dfcb-dependencies</module>
-        <module>dfcb-docs</module>
-        <module>dfcb-platform</module>
-        <module>dfcb-services</module>
+        <module>../dfcb-components</module>
+        <module>../dfcb-dependencies</module>
+        <module>../dfcb-docs</module>
+        <module>../dfcb-platform</module>
+        <module>../dfcb-services</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.dragonflyxd</groupId>
+                <artifactId>dfcb-dependencies</artifactId>
+                <version>${reversion}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

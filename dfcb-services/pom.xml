@@ -6,11 +6,13 @@
 
     <parent>
         <groupId>com.dragonflyxd</groupId>
-        <artifactId>dfcb</artifactId>
+        <artifactId>dfcb-parent</artifactId>
         <version>${reversion}</version>
+        <relativePath>../dfcb-parent</relativePath>
     </parent>
 
     <artifactId>dfcb-services</artifactId>
+    <version>${dfcb.services.version}</version>
     <packaging>pom</packaging>
     <name>DFC Services</name>
     <description>DFC Services</description>

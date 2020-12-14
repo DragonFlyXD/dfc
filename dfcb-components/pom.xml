@@ -6,11 +6,13 @@
 
     <parent>
         <groupId>com.dragonflyxd</groupId>
-        <artifactId>dfcb</artifactId>
+        <artifactId>dfcb-parent</artifactId>
         <version>${reversion}</version>
+        <relativePath>../dfcb-parent</relativePath>
     </parent>
 
     <artifactId>dfcb-components</artifactId>
+    <version>${dfcb.components.version}</version>
     <packaging>pom</packaging>
     <name>DFC components</name>
     <description>DFC Components</description>
@@ -20,22 +22,6 @@
         <module>dfcb-common-core</module>
         <module>dfcb-common-starter</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.dragonflyxd</groupId>
-                <artifactId>dfbc-context</artifactId>
-                <version>${reversion}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.dragonflyxd</groupId>
-                <artifactId>dfbc-common-core</artifactId>
-                <version>${reversion}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

@@ -7,10 +7,10 @@
     <parent>
         <groupId>com.dragonflyxd</groupId>
         <artifactId>dfcb-components</artifactId>
-        <version>${reversion}</version>
+        <version>${dfcb.components.version}</version>
     </parent>
 
-    <artifactId>dfbc-common-core</artifactId>
+    <artifactId>dfcb-common-core</artifactId>
     <packaging>jar</packaging>
     <name>DFC Common Core</name>
     <description>DFC Common Core</description>
@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.dragonflyxd</groupId>
-            <artifactId>dfbc-context</artifactId>
+            <artifactId>dfcb-context</artifactId>
         </dependency>
 
         <dependency>

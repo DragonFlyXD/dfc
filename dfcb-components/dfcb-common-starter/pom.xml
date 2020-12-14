@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.dragonflyxd</groupId>
         <artifactId>dfcb-components</artifactId>
-        <version>${reversion}</version>
+        <version>${dfcb.components.version}</version>
     </parent>
 
     <artifactId>dfcb-common-starter</artifactId>
@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.dragonflyxd</groupId>
-            <artifactId>dfbc-common-core</artifactId>
+            <artifactId>dfcb-common-core</artifactId>
         </dependency>
 
         <dependency>

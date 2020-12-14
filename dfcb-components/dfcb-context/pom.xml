@@ -7,10 +7,10 @@
     <parent>
         <groupId>com.dragonflyxd</groupId>
         <artifactId>dfcb-components</artifactId>
-        <version>${reversion}</version>
+        <version>${dfcb.components.version}</version>
     </parent>
 
-    <artifactId>dfbc-context</artifactId>
+    <artifactId>dfcb-context</artifactId>
     <packaging>jar</packaging>
     <name>DFC Context</name>
     <description>DFC Context</description>
